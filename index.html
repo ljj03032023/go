@@ -59,8 +59,12 @@ async function getUrl() {
   try {
     const target = await getUrl();
     if (!target) throw new Error('no url');
+    // 支持两种写法：
+    //   /go/                 → 打开点单页
+    //   /go/#admin?pin=8888  → 打开后台
+    const hash = location.hash.replace(/^#\/?/, '');
     const p = location.pathname.replace(/^\/go\/?/, '');
-    const tail = (p + location.search + location.hash).replace(/^\//, '');
+    const tail = (hash || (p + location.search)).replace(/^\//, '');
     location.replace(target.replace(/\/$/, '') + '/' + tail);
   } catch (e) {
     err.style.display = 'block';
